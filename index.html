@@ -11,53 +11,78 @@
 
 <body>
 
-    <div class="modal">
-        <div class="modal_content">
-            <img src="" id="modal_img">
-        </div>
-        <span id="bt_close">&times;</span>
-    </div>
-
-
-    <div class="container">
-        <div class="row">
-            <div class="card_img">
-                <a data-lightbox href="imagens/poy1.png">
-                    <img src="imagens/poy1.png" class="small_img">
-                </a>
+    <section id="app">
+        <div class="modal">
+            <div class="modal_content">
+                <img :src="selected" id="modal_img">
             </div>
-            <div class="card_img">
-                <a data-lightbox href="imagens/poy2.jpg">
-                    <img src="imagens/poy1.png" class="small_img">
-                </a>
-            </div>
-            <div class="card_img">
-                <a data-lightbox href="imagens/poy3.jpg">
-                    <img src="imagens/poy1.png" class="small_img">
-                </a>
-            </div>
+            <span @click="closeModal" id="bt_close">&times;</span>
         </div>
         
-        <div class="row">
-            <div class="card_img">
-                <a data-lightbox href="imagens/poy4.jpg">
-                    <img src="imagens/poy1.png" class="small_img">
-                </a>
-            </div>
-            <div class="card_img">
-                <a data-lightbox href="imagens/poy3.jpg">
-                    <img src="imagens/poy1.png" class="small_img">
-                </a>
-            </div>
-            <div class="card_img">
-                <a data-lightbox href="imagens/poy2.jpg">
-                    <img src="imagens/poy1.png" class="small_img">
+        <div class="container">
+            <!-- este elemento é gerado dinâmicamente baseado pela quantidade de imagens -->
+            <div v-for="(image, index) of images" :key="index" class="card_img">
+                <a @click.prevent="selectImage(image)" data-lightbox :href="image">
+                    <img src="/imagens/poy1.png" class="small_img">
                 </a>
             </div>
         </div>
-    </div>
 
-    <script src="galeria.js"></script>
+        <!-- mostra quais imagens foram selecionadas -->
+        <div v-if="list.length > 0">
+            <h1> Imagens selecionadas </h1>
+            <ul>
+                <li v-for="(l, index) of list" :key="index"> {{l}} </li>
+            </ul>
+        </div>
+
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    images: [
+                        '/imagens/poy1.png',
+                        '/imagens/poy2.jpg',
+                        '/imagens/poy3.jpg',
+                        '/imagens/poy4.jpg'
+                    ],
+                    selected: null,
+                    list: []
+                }
+            },
+
+            created: function () {
+                // aplica o random no inicio da aplicação
+                this.randomize();
+            },
+
+            methods: {
+                // seleciona a imagem (abre o modal)
+                selectImage: function (image) {
+                    const modal = document.querySelector('.modal');
+                    modal.classList.toggle('modal_active');
+
+                    this.selected = image;
+                    this.list.push(image);
+                },
+
+                // método para fechar o modal
+                closeModal: function () {
+                    const modal = document.querySelector('.modal');
+                    modal.classList.toggle('modal_active');
+                },
+
+                // Aplica o random nas imagens
+                randomize: function () {
+                    this.images = this.images.sort(() => .5 - Math.random());
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

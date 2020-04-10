@@ -22,7 +22,7 @@
     border-radius: 10px;
 }
 
-.row{
+.row, .container{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
